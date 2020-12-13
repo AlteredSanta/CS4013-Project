@@ -1,5 +1,12 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,10 +25,19 @@ import javafx.stage.Stage;
 
 public class UserScene {
 	private Stage window = new Stage();
-	private Button RegisterProperty, PayTax, View, LogOut;
+	private Button RegisterProperty, PayTax, View, LogOut, RegisterOwner;
 	private Label Logo;
 	private Scene UserScene;
-	
+	private Scanner in;
+    private File ownersDir = new File("owners");;
+    private File userDir;
+    private File userInfo;
+    private Owner currentUser;
+    private static ArrayList<Owner> owners = new ArrayList<Owner>();
+   
+    private String Address, Postcode, MarketValue, Location, Principal, DateofLasttaxPayment, DueTax, OverdueTax, TotalTax;
+    
+    public String username;
 	public UserScene(Stage stage) {
 		UserScene();
 	}
@@ -34,29 +50,33 @@ public class UserScene {
 		grid.setHgap(8);
 		
 		//Setting UP BUTTONS
+		//Register Owner button
+		RegisterOwner = new Button("Register Owner");
+		RegisterOwner.setPrefSize(120,25);
+		GridPane.setConstraints(RegisterOwner, 0, 0);
 		//Register Property button
 		RegisterProperty = new Button("Register Property");
 		RegisterProperty.setPrefSize(120, 25);
-		GridPane.setConstraints(RegisterProperty, 0, 0);
+		GridPane.setConstraints(RegisterProperty, 0, 1);
 		
 		//PayTax button
 		PayTax = new Button("Pay Tax");
 		PayTax.setPrefSize(120, 25);
-		GridPane.setConstraints(PayTax, 0, 1);
+		GridPane.setConstraints(PayTax, 0, 2);
 		
 		//View button
 		View = new Button("View");
 		View.setPrefSize(120, 25);
-		GridPane.setConstraints(View, 0, 2);
+		GridPane.setConstraints(View, 0, 3);
 		
 		//LogOut button
 		LogOut = new Button("Log Out");
 		LogOut.setPrefSize(120, 25);
-		GridPane.setConstraints(LogOut, 0, 4);
+		GridPane.setConstraints(LogOut, 0, 5);
 		
 		
 		//adding elements go GridPane
-		grid.getChildren().addAll(RegisterProperty, PayTax, View, LogOut);
+		grid.getChildren().addAll(RegisterProperty, PayTax, View, LogOut, RegisterOwner);
 		grid.setAlignment(Pos.CENTER);
 		
 		
@@ -88,9 +108,13 @@ public class UserScene {
 		//	window.close();
 		});
 		
+		RegisterOwner.setOnAction(e-> {
+			RegisterOwner();
+		});
+		
 		//RegisterProperty button action
 		RegisterProperty.setOnAction(e -> {
-			RegisterProperty();
+	//		RegisterProperty();
 		});
 		
 		PayTax.setOnAction(e -> {
@@ -102,8 +126,71 @@ public class UserScene {
 		});
 	}
 	
+	
+	//WINDOW AFTER PRESSING REGISTER OWNER
+	private void RegisterOwner() {
+		//setsup the window
+		Stage RegisterOwner = new Stage();
+		RegisterOwner.initModality(Modality.APPLICATION_MODAL);
+		RegisterOwner.setTitle("Register New Owner");
+		RegisterOwner.setMinWidth(200);
+		RegisterOwner.setMinHeight(200);
+				
+		//creates layout
+		GridPane GridRegister = new GridPane();
+		GridRegister.setPadding(new Insets(10, 10, 10, 10));
+		GridRegister.setVgap(8);
+		GridRegister.setHgap(8);
+		BorderPane BorderPaneOwner = new BorderPane();
+		BorderPaneOwner.setCenter(GridRegister);	
+		
+		Button Exit, Register;
+		Label WriteName, status;
+		TextField GetFirstName;
+		
+		//================Labels================
+		WriteName = new Label("Enter First and Second name:");
+		GridPane.setConstraints(WriteName, 0, 0);
+		
+		status = new Label("");
+		GridPane.setConstraints(status, 0, 1);
+		
+		//================Text Field================
+		GetFirstName = new TextField();
+		GetFirstName.setPromptText("e.g. Oliver Twist");
+		GetFirstName.setPrefSize(175, 22);
+		GridPane.setConstraints(GetFirstName, 1, 0);
+		
+		//================Buttons================
+		Register = new Button("Register");
+		Register.setPrefSize(100, 22);
+		GridPane.setConstraints(Register, 1, 1);
+		Exit = new Button("Exit");
+		Exit.setPrefSize(100, 22);
+		GridPane.setConstraints(Exit, 1, 2);
+		Exit.setOnAction(e-> RegisterOwner.close());
+		
+		Register.setOnAction(e -> {
+			String FSname = GetFirstName.getText();
+			if (registerNewUser(FSname) == true) {
+				status.setText("Successfully Registered");
+			} else {
+				status.setText("Owner already exists");
+			}
+		});
+		
+		GridRegister.getChildren().addAll(Exit, Register, WriteName, GetFirstName, status);
+		//creates new scene
+		Scene registerOwnerScene = new Scene(BorderPaneOwner);
+		
+		//sets the scene and displays the scene
+		RegisterOwner.setScene(registerOwnerScene);
+		RegisterOwner.showAndWait();
+		
+	}
+
 	//Window that pops up after pressing "RegisterProperty" button
-	public void RegisterProperty() {
+	private void RegisterProperty() {
 		//Setting up the stage
 		Stage RegisterProperty = new Stage();
 		RegisterProperty.initModality(Modality.APPLICATION_MODAL);
@@ -120,67 +207,182 @@ public class UserScene {
 		regmainLay.setCenter(registerLayout);
 		
 		//ALL THE Labels 
-		Label address, postcode, marketValue, location, principal, DofLastTaxPayment, status;
+		Label address, postcode, marketValue, location, principal, DofLastTaxPayment, status, User;
+		User = new Label("Owner");
+		GridPane.setConstraints(User, 0, 0);
 		address = new Label("Address");
-		GridPane.setConstraints(address, 0, 0);
+		GridPane.setConstraints(address, 0, 1);
 		postcode = new Label("Postcode");
-		GridPane.setConstraints(postcode, 0, 1);
+		GridPane.setConstraints(postcode, 0, 2);
 		marketValue = new Label("MarketValue");
-		GridPane.setConstraints(marketValue, 0, 2);
+		GridPane.setConstraints(marketValue, 0, 3);
 		location = new Label("Location");
-		GridPane.setConstraints(location, 0, 3);
+		GridPane.setConstraints(location, 0, 4);
 		principal = new Label("Principal");
-		GridPane.setConstraints(principal, 0, 4);
+		GridPane.setConstraints(principal, 0, 5);
 		DofLastTaxPayment = new Label("Date of last tax Payment");
-		GridPane.setConstraints(DofLastTaxPayment, 0, 5);
+		GridPane.setConstraints(DofLastTaxPayment, 0, 6);
 		status = new Label("");
-		GridPane.setConstraints(status, 0, 7);
+		GridPane.setConstraints(status, 0, 8);
 		
 		//ALL THE TEXTFIELDS
 		//ADDRESS TEXTFIELD
 		TextField Taddress, Tpostcode, TmarketValue, Tprincipal, TDofLastTaxPayment;
 		Taddress = new TextField();
 		Taddress.setPromptText("Address");
-		GridPane.setConstraints(Taddress, 1, 0);
+		GridPane.setConstraints(Taddress, 1, 1);
 		//POSTCODE TEXTFIELD
 		Tpostcode = new TextField();
 		Tpostcode.setPromptText("Postcode e.g A65 F4E2");
-		GridPane.setConstraints(Tpostcode, 1, 1);
+		GridPane.setConstraints(Tpostcode, 1, 2);
 		//MARKETVALUE TEXTFIELD
 		TmarketValue = new TextField();
 		TmarketValue.setPromptText("Market Value");
-		GridPane.setConstraints(TmarketValue, 1, 2);
-		//LOCATION TEXTFIELD
+		GridPane.setConstraints(TmarketValue, 1, 3);
+		//LOCATION CHOICEBOX
 		ChoiceBox<String> Tlocation = new ChoiceBox<>();
 		Tlocation.setPrefSize(150, 20);
 		Tlocation.getItems().addAll("City", "Large Town", "Small Town", "Village", "Country Side");
-		GridPane.setConstraints(Tlocation, 1, 3);
+		GridPane.setConstraints(Tlocation, 1, 4);
+		//USERLIST CHOICEBOX
+		ChoiceBox<String> UserList = new ChoiceBox<>();
+		UserList.setPrefSize(150, 20);
+		UserList.getItems().addAll("Pappy Santa" , "Oliver Twist");    // <<=========== Need to put all the OWNERS
+		GridPane.setConstraints(UserList, 1, 0);
 		//PRINCIPAL TEXTFIELD
 		Tprincipal = new TextField();
 		Tprincipal.setPromptText("Y/N e.g. Y - Yes");
-		GridPane.setConstraints(Tprincipal, 1, 4);
+		GridPane.setConstraints(Tprincipal, 1, 5);
 		//LAST TAX PAYMENT TEXT FIELD
 		TDofLastTaxPayment = new TextField();
 		TDofLastTaxPayment.setPromptText("YYYY-MM-DD");
-		GridPane.setConstraints(TDofLastTaxPayment, 1, 5);
+		GridPane.setConstraints(TDofLastTaxPayment, 1, 6);
 
 		//creates needed buttons
 		Button closebutton = new Button("Exit");
 		closebutton.setPrefSize(150, 22);
-		GridPane.setConstraints(closebutton, 1, 6);
+		GridPane.setConstraints(closebutton, 1, 7);
 		closebutton.setOnAction(e -> RegisterProperty.close());
 		
 		Button addproperty = new Button("Add Property");
 		addproperty.setPrefSize(150, 22);
-		GridPane.setConstraints(addproperty, 0, 6);
+		GridPane.setConstraints(addproperty, 0, 7);
 		addproperty.setOnAction(e-> {
 			status.setText("Successfully Added");
 			System.out.println("property successfully added");
 		});
+		
+		
+		//Connection to mainCode
+        if(ownersDir.list().length == 0) {
+            System.out.println("No owners detected.");
+            status.setText("No owners found.");
+       }
+        
+		String _owner = UserList.getValue();
+		String  _address = Taddress.getText();;
+		String  _postcode = Tpostcode.getText();;
+		Double _marketValue = Double.parseDouble(TmarketValue.getText());;
+		String _location = Tlocation.getValue();
+		Boolean _principal = Boolean.parseBoolean(Tprincipal.getText());
+		String _date = TDofLastTaxPayment.getText();
 
+        File[] listOfFiles = ownersDir.listFiles();
+
+        for(int i = 0; i < listOfFiles.length; i++) {
+           String existingOwner = listOfFiles[i].getName().replaceAll("_", " ");
+           userDir = listOfFiles[i];
+
+           Owner o = new Owner(existingOwner, userDir);
+
+           boolean ownerExists = false;
+           for(int j = 0; j < owners.size(); j++) {
+               if(o.getName().equals(owners.get(j).getName())) {
+                   ownerExists = true;
+                   break;
+               }
+           }
+
+           if(!ownerExists) {
+               String line = "";
+               String cvsSplitBy = ",";
+
+               try {
+                   BufferedReader br = new BufferedReader(new FileReader(listOfFiles[i] + "/PropertyInfo.csv"));
+                   BufferedReader br2 = new BufferedReader(new FileReader(listOfFiles[i] + "/PaymentsFrom"
+                                                           + existingOwner.replaceAll(" ", "") + ".csv"));
+
+                   br.readLine();
+                   br2.readLine();
+
+                   while((line = br.readLine()) != null) {
+                       String[] data = line.split(cvsSplitBy);
+
+                       o.registerProperty(_address, _postcode, _marketValue, _location, _principal, _date);
+                   }
+
+                   ArrayList<Property> propertyList = o.getListOfProperties().getProperties();
+                   double[] dueList = new double[propertyList.size()];
+                   double[] overdueList = new double[propertyList.size()];
+                   double[] totalList = new double[propertyList.size()];
+
+                   while((line = br2.readLine()) != null) {
+                       String[] data = line.split(cvsSplitBy);
+
+                       String Postcode = data[0];
+                       double due = Double.parseDouble(data[5]);
+                       double overdue = Double.parseDouble(data[6]);
+                       double total = Double.parseDouble(data[7]);
+
+                       for(int j = 0; j < propertyList.size(); j++) {
+                           Property p = propertyList.get(j);
+
+                            if(p.getPostcode().equals(Postcode)) {
+                                dueList[j] = due;
+                                overdueList[j] = overdue;
+                                totalList[j] = total;
+                            }
+                       }
+                   }
+                   for(int j = 0; j < propertyList.size(); j++) {
+                       if(totalList[j] == 0) {
+                           propertyList.get(j).payTotalTax();
+                       } else if(dueList[j] == 0) {
+                           propertyList.get(j).payDueTax();
+                       } else {
+                           propertyList.get(j).payTotalOverdueTax();
+                       }
+                   }
+
+                   br.close();
+                   br2.close();
+               } catch (IOException e) {
+                   System.out.println("Error: Failed to get property info.");
+               }
+
+               owners.add(o);
+           }
+       }
+
+       char c = 'A';
+       for(int i = 0; i < owners.size(); i++) {
+           String username = owners.get(i).getName();
+           username = username.replaceAll("_", " ");
+
+           System.out.println(c + ") " + username);
+           c++;
+       }
+	
+	
+		
+		
+		
+		
+		
+		
 		registerLayout.getChildren().addAll(address, postcode, marketValue, location, principal, DofLastTaxPayment,
 											Taddress, Tpostcode, TmarketValue, Tlocation, Tprincipal, TDofLastTaxPayment,
-											closebutton, addproperty, status);
+											closebutton, addproperty, status, User, UserList);
 		
 		//creates new scene
 		Scene RegisterPropertyscene = new Scene(regmainLay);
@@ -191,7 +393,7 @@ public class UserScene {
 	}
 	
 	//Window that pops up after pressing "Pay Tax" button
-	public void PayTax() {
+	private void PayTax() {
 		//Setting up the stage
 		Stage PayTaxes = new Stage();
 		PayTaxes.initModality(Modality.APPLICATION_MODAL);
@@ -313,7 +515,7 @@ public class UserScene {
 	}
 	
 	//Window that pops up after pressing "View" button
-	public void View() {
+	private void View() {
 		Stage View = new Stage();
 		View.initModality(Modality.APPLICATION_MODAL);
 		View.setTitle("View Property");
@@ -445,24 +647,42 @@ public class UserScene {
 		View.setScene(RegisterPropertyscene);
 		View.showAndWait();
 	}
+
+
+	private boolean registerNewProperty(String _owner, String _address, String _postcode, String _marketValue, String _location, String _principal, String _date) {
+		String owner = _owner;
+		String address = _address;
+		String postcode = _postcode;
+		String marketValue = _marketValue;
+		String location = _location;
+		String principal = _principal;
+		String date = _date;
+		
+		
+		
+		
+		return false;
+		
+	}
+	
+	private boolean registerNewUser(String s) {
+    	String user = s;
+
+    	for(int i = 0; i < owners.size(); i++) {
+        	if(user.equals(owners.get(i).getName())) {
+            	System.out.println("Error: Owner already exists.\n");
+            	return false;
+        	}
+    	}
+
+    	user = user.replaceAll(" ", "_");
+    	userDir = new File(ownersDir + "/" + user);
+    	userDir.mkdir();
+    	
+        currentUser = new Owner(user.replaceAll("_", " "), userDir);
+        owners.add(currentUser);
+
+        return true;
+    
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

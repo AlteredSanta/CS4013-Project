@@ -183,7 +183,22 @@ public class LogInScene {
 	}
 
 			
-}
+	public static boolean SearchForLoginPassowrd(File source, String UserPass) throws FileNotFoundException {
+		final Scanner scanner = new Scanner(source);
+		
+		while(scanner.hasNextLine()) {
+			final String lineFromFile = scanner.nextLine();
+			if(lineFromFile.contains(UserPass)) {
+				scanner.close();
+				return true;
+			}
+		}
+		scanner.close();
+		return false;
+				
+				}
+			
+	}
 
 	
 	

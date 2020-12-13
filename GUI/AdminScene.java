@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -40,7 +41,7 @@ public class AdminScene {
 				GridPane.setConstraints(DataButton, 0, 0);
 				
 				//OverDueButton
-				OverDueButton = new Button("OverDue");
+				OverDueButton = new Button("Over Due");
 				OverDueButton.setPrefSize(120, 25);
 				GridPane.setConstraints(OverDueButton, 0, 1);
 				
@@ -224,74 +225,250 @@ public class AdminScene {
 	}
 	
 	private void OverDue() {
+		Stage StageOverdue = new Stage();
 		//setsup the window
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("OverDue");
-		window.setMinWidth(375);
-		window.setMinHeight(400);
+		StageOverdue.initModality(Modality.APPLICATION_MODAL);
+		StageOverdue.setTitle("Data");
+		StageOverdue.setMinWidth(375);
+		StageOverdue.setMinHeight(200);
 		
 		//creates layout
-		GridPane ViewInfo = new GridPane();
-		ViewInfo.setPadding(new Insets(10, 10, 10, 10));
-		ViewInfo.setVgap(8);
-		ViewInfo.setHgap(8);
-		BorderPane BorderPaneView = new BorderPane();
-		BorderPaneView.setCenter(ViewInfo);	
-				
+		GridPane gridOverdue = new GridPane();
+		gridOverdue.setPadding(new Insets(10, 10, 10, 10));
+		gridOverdue.setVgap(8);
+		gridOverdue.setHgap(8);
+		BorderPane BorderPaneOverdue = new BorderPane();
+		BorderPaneOverdue.setCenter(gridOverdue);
+		
+		Label chooseYear, selectOnRoutine, EnterRkey, display;
+		ChoiceBox<String> YYYY, YN;
+		TextField EnteredKey;
+		Button Exit, getOverdue;
+		
+		//=============ALL LABELS=============
+		chooseYear = new Label("Choose the Year");
+		GridPane.setConstraints(chooseYear, 0, 0);
+		selectOnRoutine = new Label("Select properties based on routine key");
+		GridPane.setConstraints(selectOnRoutine, 0, 1);
+		EnterRkey = new Label("Enter Routine Key");
+		GridPane.setConstraints(EnterRkey, 0, 2);
+		display = new Label("display");
+		GridPane.setConstraints(display, 0, 3);
+		
+		//=============ALL CHOICEBOXES=============
+		//YEAR CHOICEBOX
+		YYYY = new ChoiceBox<>();
+		YYYY.setPrefSize(90, 20);
+		YYYY.getItems().addAll("2020");
+		GridPane.setConstraints(YYYY, 1, 0);
+		
+		//BOOLEAN YES/NO
+		YN = new ChoiceBox<>();
+		YN.setPrefSize(90, 20);
+		YN.getItems().addAll("Y","N");
+		GridPane.setConstraints(YN, 1, 1);
+		
+		//=============ALL TEXTFIELDS=============
+		//ENTERED ROUTINE KEY
+		EnteredKey = new TextField();
+		EnteredKey.setPrefSize(90, 22);
+		EnteredKey.setPromptText("e.g. V94/A56");
+		GridPane.setConstraints(EnteredKey, 1, 2);
+		
+		//=============ALL BUTTONS=============
+		//getOverdue button
+		getOverdue = new Button("Get OverDue");
+		getOverdue.setPrefSize(100, 22);
+		GridPane.setConstraints(getOverdue, 2, 2);
+		getOverdue.setOnAction(e-> {
+			
+		});
+		
+		//exit button
+		Exit = new Button("Exit");
+		Exit.setPrefSize(100, 22);
+		GridPane.setConstraints(Exit, 2, 5);
+		Exit.setOnAction(e-> {
+			StageOverdue.close();
+		});
+		
+		String check = YN.getValue();
+
+		gridOverdue.getChildren().addAll(	chooseYear, selectOnRoutine, display, 
+											YYYY, YN, Exit, getOverdue, EnterRkey, EnteredKey);
 		//creates new scene
-		Scene scene = new Scene(BorderPaneView);
+		Scene OverdueScene = new Scene(BorderPaneOverdue);
 				
 		//sets the scene and displays the scene
-		window.setScene(scene);
-		window.showAndWait();
+		StageOverdue.setScene(OverdueScene);
+		StageOverdue.showAndWait();
 		
 	}
 	
 	private void Statistics() {
+		Stage StageStats = new Stage();
 		//setsup the window
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Statistics");
-		window.setMinWidth(375);
-		window.setMinHeight(400);
+		StageStats.initModality(Modality.APPLICATION_MODAL);
+		StageStats.setTitle("Data");
+		StageStats.setMinWidth(375);
+		StageStats.setMinHeight(200);
 		
 		//creates layout
-		GridPane ViewInfo = new GridPane();
-		ViewInfo.setPadding(new Insets(10, 10, 10, 10));
-		ViewInfo.setVgap(8);
-		ViewInfo.setHgap(8);
-		BorderPane BorderPaneView = new BorderPane();
-		BorderPaneView.setCenter(ViewInfo);	
+		GridPane DataInfo = new GridPane();
+		DataInfo.setPadding(new Insets(10, 10, 10, 10));
+		DataInfo.setVgap(8);
+		DataInfo.setHgap(8);
+		BorderPane BorderPaneStatistics = new BorderPane();
+		BorderPaneStatistics.setCenter(DataInfo);	
 				
+		Label InputPC, TotalTax, AverageTax, NumberOfPropertyTax,  TotalTaxPaid, AverageTaxPaid, NumberOfPropertyTaxPaid;
+		TextField EnteredText;
+		Button Exit, GetTaxInfo;
+		
+		//=================ALL LABELS=================
+		InputPC = new Label("Enter Post Code");
+		GridPane.setConstraints(InputPC, 0, 0);
+		TotalTax = new Label("Total Tax Paid:");
+		GridPane.setConstraints(TotalTax, 0, 2);
+		AverageTax = new Label("Average Tax Paid:");
+		GridPane.setConstraints(AverageTax, 0, 3);
+		NumberOfPropertyTax = new Label("Number of Property Tax Paid:");
+		GridPane.setConstraints(NumberOfPropertyTax, 0, 4);
+		
+		//Labels used to show the data
+		TotalTaxPaid = new Label("0000");
+		GridPane.setConstraints(TotalTaxPaid, 1, 2);
+		AverageTaxPaid = new Label("0000");
+		GridPane.setConstraints(AverageTaxPaid, 1, 3);
+		NumberOfPropertyTaxPaid = new Label("0000");
+		GridPane.setConstraints(NumberOfPropertyTaxPaid, 1, 4);
+		
+		//=================TEXT FIELDS=================
+		EnteredText = new TextField();
+		EnteredText.setPromptText("E.g. A56 / V94");
+		GridPane.setConstraints(EnteredText, 1, 0);
+		
+		//=================ALL THE BUTTONS=================
+		//GETTAXINFO BUTTON
+		GetTaxInfo =new Button("Get Tax Details");
+		GetTaxInfo.setPrefSize(100, 22);
+		GridPane.setConstraints(GetTaxInfo, 2, 0);
+		GetTaxInfo.setOnAction(e-> {
+			
+		});
+		//EXIT BUTTON
+		Exit = new Button("Exit");
+		Exit.setPrefSize(100, 22);
+		GridPane.setConstraints(Exit, 2, 12);
+		Exit.setOnAction(e-> {
+			StageStats.close();
+		});
+		
+		DataInfo.getChildren().addAll(	GetTaxInfo, InputPC, TotalTax, AverageTax, NumberOfPropertyTax,
+										TotalTaxPaid, AverageTaxPaid, NumberOfPropertyTaxPaid,
+										EnteredText, Exit);
 		//creates new scene
-		Scene scene = new Scene(BorderPaneView);
+		Scene StatsScene = new Scene(BorderPaneStatistics);
 				
 		//sets the scene and displays the scene
-		window.setScene(scene);
-		window.showAndWait();
+		StageStats.setScene(StatsScene);
+		StageStats.showAndWait();
 		
 	}
 	
 	private void Changes() {
+		Stage StageChanges = new Stage();
 		//setsup the window
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Changes");
-		window.setMinWidth(375);
-		window.setMinHeight(400);
+		StageChanges.initModality(Modality.APPLICATION_MODAL);
+		StageChanges.setTitle("Data");
+		StageChanges.setMinWidth(375);
+		StageChanges.setMinHeight(200);
 		
 		//creates layout
-		GridPane ViewInfo = new GridPane();
-		ViewInfo.setPadding(new Insets(10, 10, 10, 10));
-		ViewInfo.setVgap(8);
-		ViewInfo.setHgap(8);
-		BorderPane BorderPaneView = new BorderPane();
-		BorderPaneView.setCenter(ViewInfo);	
-				
+		GridPane gridChanges = new GridPane();
+		gridChanges.setPadding(new Insets(10, 10, 10, 10));
+		gridChanges.setVgap(8);
+		gridChanges.setHgap(8);
+		BorderPane BorderPaneChanges = new BorderPane();
+		BorderPaneChanges.setCenter(gridChanges);
+		
+		Label 	chooseOwner, chooseProp, FixedCost, MarketValue, LocationTax, PPRCharge, UnpaidTax, 
+				TotalTax, FixedCostVal, MarketValueVal, LocationTaxVal, PPRChargeVal, UnpaidTaxVal, TotalTaxVal;
+		ChoiceBox<String> OwnerChoice, PropChoice;
+		Button Exit, getValues;
+		
+		//=============ALL LABELS=============
+		chooseOwner = new Label("Choose Owner");
+		GridPane.setConstraints(chooseOwner, 0, 0);
+		chooseProp = new Label("Choose Property");
+		GridPane.setConstraints(chooseProp, 0, 1);
+		FixedCost = new Label("Fixed Cost:");
+		GridPane.setConstraints(FixedCost, 0, 3);
+		MarketValue = new Label("Market Cost:");
+		GridPane.setConstraints(MarketValue, 0, 4);
+		LocationTax = new Label("Location Tax:");
+		GridPane.setConstraints(LocationTax, 0, 5);
+		PPRCharge = new Label("PRP Charge:");
+		GridPane.setConstraints(PPRCharge, 0, 6);
+		UnpaidTax = new Label("Unpaid Tax penalty:");
+		GridPane.setConstraints(UnpaidTax, 0, 7);
+		TotalTax = new Label("Total Tax:");
+		GridPane.setConstraints(TotalTax, 0, 8);
+		
+		//Labels that will be input values
+		FixedCostVal = new Label("€ 0000");
+		GridPane.setConstraints(FixedCostVal, 1, 3);
+		MarketValueVal = new Label("€ 0000");
+		GridPane.setConstraints(MarketValueVal, 1, 4);
+		LocationTaxVal = new Label("€ 0000");
+		GridPane.setConstraints(LocationTaxVal, 1, 5);
+		PPRChargeVal = new Label("€ 0000");
+		GridPane.setConstraints(PPRChargeVal, 1, 6);
+		UnpaidTaxVal = new Label("€ 0000");
+		GridPane.setConstraints(UnpaidTaxVal, 1, 7);
+		TotalTaxVal = new Label("€ 0000");
+		GridPane.setConstraints(TotalTaxVal, 1, 8);
+		
+		
+		//=============ALL CHOICEBOXES=============
+		OwnerChoice = new ChoiceBox<>();
+		OwnerChoice.setPrefSize(100, 20);
+		OwnerChoice.getItems().addAll("Patrick Hourigan", "Andriy Kyrychenko", "Hello World");
+		GridPane.setConstraints(OwnerChoice, 1, 0);
+		
+		PropChoice = new ChoiceBox<>();
+		PropChoice.setPrefSize(100, 20);
+		PropChoice.getItems().addAll(	"14 Downtown Street, Limerick, Ireland, V94 V9V9", 
+										"88 Canqot Street, Sligo, Ireland, Q12 Q1Q2");
+		GridPane.setConstraints(PropChoice, 1, 1);
+		
+		//=============ALL BUTTONS=============
+		//getValuse button
+		getValues = new Button("Get Values");
+		getValues.setPrefSize(100, 22);
+		GridPane.setConstraints(getValues, 2, 2);
+		getValues.setOnAction(e-> {
+			
+		});
+		
+		//exit button
+		Exit = new Button("Exit");
+		Exit.setPrefSize(100, 22);
+		GridPane.setConstraints(Exit, 2, 9);
+		Exit.setOnAction(e-> {
+			StageChanges.close();
+		});
+		
+		gridChanges.getChildren().addAll(	chooseOwner, chooseProp, FixedCost, MarketValue, LocationTax, PPRCharge, UnpaidTax, 
+											TotalTax, FixedCostVal, MarketValueVal, LocationTaxVal, PPRChargeVal, UnpaidTaxVal,
+											OwnerChoice, PropChoice, Exit, getValues, TotalTaxVal);
+		
 		//creates new scene
-		Scene scene = new Scene(BorderPaneView);
+		Scene ChangesScene = new Scene(BorderPaneChanges);
 				
 		//sets the scene and displays the scene
-		window.setScene(scene);
-		window.showAndWait();
+		StageChanges.setScene(ChangesScene);
+		StageChanges.showAndWait();
 	}
 
 
