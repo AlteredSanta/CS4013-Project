@@ -1,0 +1,41 @@
+Link to Github: https://github.com/AlteredSanta/CS4013-Project
+
+How to Compile and Run Program:
+(Note: When the program is running, it will create a new directory alongside the src directory called
+"owners.")
+1) Make sure all of the .java files are together in the same directory.
+2) Go to the directory where all of the java files are saved in the command prompt.
+3) Type 'javac PropertySystem.java' to compile all of the files.
+4) Type 'java PropertySystem' to run the program.
+
+How to Use Program:
+1) Run PropertySystem.java
+2) If no owners are registered, a new directory called "owners" is created.
+3) New owners that are registered with the system have their info saved in .csv files in owners.
+4) Enter name of owner (first name and last name are highly suggested)
+5) Four options are now presented:
+     - Register a new property (Selected by typing the letter "R")
+     - Pay tax for a property (Selected by typing the letter "P")
+     - View a list of properties then view balancing statement of one year or all years 
+       (Selected by typing the letter "V")
+     - Return back to owner select screen or quit the program (Selected by typing the letter "Q")
+6) In owner select screen, management mode can be entered by typing "man"
+7) Five options are presented in management mode:
+     - Get property tax payment data for any property and owner (Selected by typing the letter "D")
+     - Get a list of all overdue property tax for a particular year, with an option to select
+       an area based on their routing key (Selected by typing the letter "O")
+     - Get property tax statistics for an area based on the entered routing key
+       (Selected by typing the letter "S")
+     - Investigate impact of possible changes to rates contributing to property tax 
+       (Selected by typing the letter "C")
+     - Return back to owner select screen (Selected by typing the letter "R")
+
+How to Use Graphiccal User Interface:
+1) Run MainGUI.java
+2)To log in as Admin use: 	username: admin 
+			password: admin
+
+    To log in as User use:	username: user
+			password: user 
+
+3)Follow the buttons with options to get work done!

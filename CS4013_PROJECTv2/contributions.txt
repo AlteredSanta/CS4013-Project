@@ -1,0 +1,21 @@
+Contributions:
+Evan Boland (19229348)
+ - PropertySystem.java
+ - PropertyMenu.java 
+ - ManagementMenu.java
+ - Helped with Payments.java
+
+Andriy Kyrychenko (19247745) 
+ - GUI (AdminScene.java, LogInScene.java, MainGUI.java, UserScene.java)
+
+Jordan O'Sullivan Cronin (19272987)
+ - Property.java 
+ - Properties.java 
+ - Owner.java
+ - Helped with PropertyMenu.java
+
+Barry O'Sullivan (19244789)
+ - Payments.java
+ - PropertyTax.java 
+ - TaxCalculator.java 
+ - Helped with GUI
